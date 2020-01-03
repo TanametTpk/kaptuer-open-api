@@ -1,19 +1,75 @@
 const getAll = require('require-all')
 
-let models = getAll({
-    dirname: __dirname + "/models",
-})
+const getAndSetModules = ( state , name, path) => {
 
-let configs = getAll({
-    dirname: __dirname + "/config",
-})
+    let jsx = getAll({
+        dirname: path,
+    })
 
-let services = getAll({
-    dirname: __dirname + "/services",
-})
+    // if state already have then merge
+    if (state[name]){
+        state = {
+            ...state,
+            [name]: {
+                ...state[name],
+                ...jsx
+            }
+        }
+    }
 
-module.exports = {
-    models,
-    configs,
-    services
+    // if new attribute then assign new one
+    else {
+        state = {
+            ...state,
+            [name]: jsx
+        }
+    }
+
+    return state
+
 }
+
+let state = {}
+let defaultModules = [
+    {
+        name: "models",
+        path: "./models"
+    },
+    {
+        name: "configs",
+        path: "./configs"
+    },
+    {
+        name: "services",
+        path: "./services"
+    }
+]
+
+let userModules = [
+    {
+        name: "models",
+        path: __dirname + "/models"
+    },
+    {
+        name: "configs",
+        path: __dirname + "/config"
+    },
+    {
+        name: "services",
+        path: __dirname + "/services"
+    }
+]
+
+defaultModules.map((defaultModule) => {
+
+    state = getAndSetModules(state, defaultModule.name, defaultModule.path)
+
+})
+
+userModules.map((userModule) => {
+
+    state = getAndSetModules(state, userModule.name, userModule.path)
+
+})
+
+module.exports = state

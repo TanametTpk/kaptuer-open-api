@@ -1,6 +1,6 @@
 module.exports = (port) => {
 
-    var express = require('./config/express');
+    var express = require('./configs/express');
     var items = express();
     const server = items.server;
     

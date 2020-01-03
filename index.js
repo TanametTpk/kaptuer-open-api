@@ -2,7 +2,7 @@ const runServer = require('./server')
 
 const start = ({port}) => {
 
-    
+    // for new setup in future
 
     runServer(port)
 
@@ -11,3 +11,5 @@ const start = ({port}) => {
 module.exports = {
     start
 }
+
+start({port: 8000})

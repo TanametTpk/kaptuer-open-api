@@ -1,4 +1,3 @@
-var device = require('express-device');
 var morgan = require('morgan');
 var fs = require('fs');
 var path = require('path');
