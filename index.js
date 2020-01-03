@@ -11,5 +11,3 @@ const start = ({port}) => {
 module.exports = {
     start
 }
-
-start({port: 8000})

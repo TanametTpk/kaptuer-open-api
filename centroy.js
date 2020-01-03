@@ -1,5 +1,7 @@
 const getAll = require('require-all')
 const fs = require('fs')
+const path = require('path')
+const appRoot = require('app-root-path');
 
 const getAndSetModules = ( state , name, path) => {
 
@@ -53,11 +55,11 @@ let userModules = [
     // },
     {
         name: "configs",
-        path: "./configs"
+        path: path.join(appRoot + "/configs")
     },
     {
         name: "services",
-        path: "./services"
+        path: path.join(appRoot + "/services")
     }
 ]
 
