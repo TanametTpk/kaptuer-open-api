@@ -1,88 +1,31 @@
 const getAll = require('require-all')
-const fs = require('fs')
-const path = require('path')
-const appRoot = require('app-root-path');
-
-const getAndSetModules = ( state , name, path) => {
-
-    let jsx = getAll({
-        dirname: path,
-    })
-
-    // if state already have then merge
-    if (state[name]){
-        state = {
-            ...state,
-            [name]: {
-                ...state[name],
-                ...jsx
-            }
-        }
-    }
-
-    // if new attribute then assign new one
-    else {
-        state = {
-            ...state,
-            [name]: jsx
-        }
-    }
-
-    return state
-
-}
+const _ = require('lodash')
 
 let state = {}
-let defaultModules = [
-    // {
-    //     name: "models",
-    //     path: "./models"
-    // },
-    {
-        name: "configs",
-        path: __dirname + "/configs"
-    },
-    // {
-    //     name: "services",
-    //     path: __dirname + "/services"
-    // }
-]
 
-let userModules = [
-    // {
-    //     name: "models",
-    //     path: __dirname + "/models"
-    // },
-    {
-        name: "configs",
-        path: path.join(appRoot + "/configs")
-    },
-    {
-        name: "services",
-        path: path.join(appRoot + "/services")
+class Centroy {
+
+    constructor(state){
+        this.state = {}
     }
-]
 
-defaultModules.map((defaultModule) => {
+    addModule(libs){
 
-    state = getAndSetModules(state, defaultModule.name, defaultModule.path)
+        let state = this.state
+        this.state = _.merge(state, libs)
 
-})
+    }
 
-try {
+    readModulesFromFiles (name, path) {
 
-    userModules.map((userModule) => {
-
-        if (!fs.existsSync(userModule.path)) {
-            throw new Error(`need path ${userModule.path}`)
-        }
-
-        state = getAndSetModules(state, userModule.name, userModule.path)
+        let jsx = getAll({
+            dirname: path,
+        })
     
-    })
+        this.addModule({[name]: jsx})
+    
+    }
 
-} catch (error) {
-    throw new Error(`import modules error -> ${error.message}`)
 }
 
-module.exports = state
+module.exports = new Centroy(state)
