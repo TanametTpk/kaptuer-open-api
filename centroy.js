@@ -1,4 +1,5 @@
 const getAll = require('require-all')
+const fs = require('fs')
 
 const getAndSetModules = ( state , name, path) => {
 
@@ -31,10 +32,25 @@ const getAndSetModules = ( state , name, path) => {
 
 let state = {}
 let defaultModules = [
+    // {
+    //     name: "models",
+    //     path: "./models"
+    // },
     {
-        name: "models",
-        path: "./models"
+        name: "configs",
+        path: __dirname + "/configs"
     },
+    // {
+    //     name: "services",
+    //     path: __dirname + "/services"
+    // }
+]
+
+let userModules = [
+    // {
+    //     name: "models",
+    //     path: __dirname + "/models"
+    // },
     {
         name: "configs",
         path: "./configs"
@@ -45,31 +61,26 @@ let defaultModules = [
     }
 ]
 
-let userModules = [
-    {
-        name: "models",
-        path: __dirname + "/models"
-    },
-    {
-        name: "configs",
-        path: __dirname + "/config"
-    },
-    {
-        name: "services",
-        path: __dirname + "/services"
-    }
-]
-
 defaultModules.map((defaultModule) => {
 
     state = getAndSetModules(state, defaultModule.name, defaultModule.path)
 
 })
 
-userModules.map((userModule) => {
+try {
 
-    state = getAndSetModules(state, userModule.name, userModule.path)
+    userModules.map((userModule) => {
 
-})
+        if (!fs.existsSync(userModule.path)) {
+            throw new Error(`need path ${userModule.path}`)
+        }
+
+        state = getAndSetModules(state, userModule.name, userModule.path)
+    
+    })
+
+} catch (error) {
+    throw new Error(`import modules error -> ${error.message}`)
+}
 
 module.exports = state
