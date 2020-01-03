@@ -1,4 +1,4 @@
-const centroy = require( "../../centroy" )
+const centroy = require( "../../centroy" ).state
 const middlewares = centroy.configs.middlewares
 const routesConfig = centroy.routes
 
