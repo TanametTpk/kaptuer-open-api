@@ -1,5 +1,6 @@
 const runServer = require('./server')
 const setup = require('./setup')
+const centroy = require('./centroy')
 
 const start = ({routes, services, port}) => {
 
