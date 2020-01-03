@@ -1,10 +1,26 @@
 const runServer = require('./server')
+const centroy = require('./centroy')
 
-const start = ({port}) => {
+const start = ({routes, services, port}) => {
 
     // for new setup in future
+    let state = {}
+    let defaultModules = [
+        {
+            name: "configs",
+            path: __dirname + "/configs"
+        }
+    ]
 
-    runServer(port)
+    defaultModules.map((defaultModule) => {
+
+        centroy.readModulesFromFiles(defaultModule.name, defaultModule.path)
+
+    })
+
+    centroy.addModule({routes, services})
+
+    runServer(port, routes, services)
 
 }
 

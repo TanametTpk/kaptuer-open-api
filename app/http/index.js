@@ -1,6 +1,6 @@
 const centroy = require( "../../centroy" )
 const middlewares = centroy.configs.middlewares
-const routesConfig = centroy.configs.routes
+const routesConfig = centroy.routes
 
 const services = centroy.services
 const express = require( "express" );
