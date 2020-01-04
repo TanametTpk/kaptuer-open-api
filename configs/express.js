@@ -19,8 +19,7 @@ module.exports = function(){
 
 	// add middlewares
 	useMiddleware.map((middleware) => app.use(middlewares[middleware]))
-	
-	app.use(require( "../app/http" ))
+	app.use(require( "../app/http" )())
 	useError.map((error) => app.use(errorHandlers[error]))
 
 	// const io = require('../app/socket')(server)
