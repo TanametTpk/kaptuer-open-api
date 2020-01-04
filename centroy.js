@@ -26,6 +26,10 @@ class Centroy {
     
     }
 
+    clear(){
+        this.state = {}
+    }
+
 }
 
 module.exports = new Centroy(state)
