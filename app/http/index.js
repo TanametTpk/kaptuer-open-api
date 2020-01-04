@@ -20,7 +20,7 @@ const createMainController = (routeConfig, routeName) => {
 
     })
 
-    const response = (res, data) => {
+    const response = (req, res, data) => {
 
         if (req._responseAsHtml){
             res.send(data)
@@ -34,12 +34,12 @@ const createMainController = (routeConfig, routeName) => {
 
     const createController = (method) => {
        
-        return async (req , res , next) => {
+        return async (req, res , next) => {
 
             try {
         
                 // res.success(await method(req));
-                response(res, await method(req))
+                response(req, res, await method(req))
         
             } catch (err){
                 next(err)

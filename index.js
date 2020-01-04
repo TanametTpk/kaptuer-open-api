@@ -1,18 +1,24 @@
 const runServer = require('./server')
-const setup = require('./setup')
+const _setup = require('./setup')
 const centroy = require('./centroy')
 
-const start = ({routes, services, middlewares, errors, port}) => {
+const setupCentroy = ({routes, services, middlewares, errors, port}) => {
 
     // for new setup in future
-    setup.init()
+    _setup.init()
     centroy.addModule({routes, services})
     centroy.addModule({configs:{ middlewares, errors:{handlers:errors} }})
 
-    runServer(port, routes, services)
+}
+
+const setup = ({routes, services, middlewares, errors, port}) => {
+
+    // for new setup in future
+    setupCentroy({routes, services, middlewares, errors, port})
+    return runServer(port, routes, services)
 
 }
 
 module.exports = {
-    start
+    setup
 }
