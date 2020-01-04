@@ -1,113 +1,116 @@
-const centroy = require( "../../centroy" ).state
-const middlewares = centroy.configs.middlewares
-const routesConfig = centroy.routes
+module.exports = () => {
 
-const services = centroy.services
-const express = require( "express" );
+    const centroy = require( "../../centroy" ).state
+    const middlewares = centroy.configs.middlewares
+    const routesConfig = centroy.routes
 
-const createMainController = (routeConfig, routeName) => {
-    
-    let rootRouter = routeConfig["route.config"]
+    const services = centroy.services
+    const express = require( "express" );
 
-    delete routeConfig["route.config"]
+    const createMainController = (routeConfig, routeName) => {
+        
+        let rootRouter = routeConfig["route.config"]
 
-    const routes = Object.values(routeConfig).sort((a,b) => {
+        delete routeConfig["route.config"]
 
-        let priorityA = a.priority || Number.MAX_SAFE_INTEGER
-        let priorityB = b.priority || Number.MAX_SAFE_INTEGER
+        const routes = Object.values(routeConfig).sort((a,b) => {
 
-        return priorityA > priorityB ? 1 : -1
+            let priorityA = a.priority || Number.MAX_SAFE_INTEGER
+            let priorityB = b.priority || Number.MAX_SAFE_INTEGER
 
+            return priorityA > priorityB ? 1 : -1
+
+        })
+
+        const response = (req, res, data) => {
+
+            if (req._responseAsHtml){
+                res.send(data)
+            }
+
+            else {
+                res.success(data)
+            }
+
+        }
+
+        const createController = (method) => {
+        
+            return async (req, res , next) => {
+
+                try {
+            
+                    // res.success(await method(req));
+                    response(req, res, await method(req))
+            
+                } catch (err){
+                    next(err)
+                }
+            
+            };
+            
+
+        }
+
+        const createParentRouter = (route, child) => {
+
+            const router = express.Router();
+
+            route.middlewares.map((mid) => {
+                if (middlewares[mid]) router.use(route.path, middlewares[mid])
+            })
+            router.use(route.path, child)
+
+            return router
+
+        }
+
+        const createRouter = (routes) => {
+
+            const router = express.Router();
+
+            routes.map((route) => {
+
+                const model = services[route.controller]
+                if (!model) return
+
+                const action = createController(model[route.action])
+
+                if (route.middlewares && route.middlewares.length > 0){
+                    route.middlewares.map((mid) => router[route.method](route.path, middlewares[mid]))
+                }
+                
+                router[route.method](route.path, action)
+            
+            })
+            
+            return router
+
+        }
+
+        const createDefaultRootRouter = (name , child) => {
+            return express.Router().use(`/${name}` , child)
+        }
+
+        let modelRouter = createRouter(routes)
+
+        if (rootRouter) {
+            rootRouter = createParentRouter(rootRouter, modelRouter)
+        }else{
+            rootRouter = createDefaultRootRouter(routeName, modelRouter)
+        }
+
+        return rootRouter
+
+    }
+
+    const mainRouter = express.Router()
+
+    const routesKey = Object.keys(routesConfig)
+    routesKey.map((controllerName) => {
+        mainRouter.use(createMainController(routesConfig[controllerName], controllerName))
     })
 
-    const response = (req, res, data) => {
-
-        if (req._responseAsHtml){
-            res.send(data)
-        }
-
-        else {
-            res.success(data)
-        }
-
-    }
-
-    const createController = (method) => {
-       
-        return async (req, res , next) => {
-
-            try {
-        
-                // res.success(await method(req));
-                response(req, res, await method(req))
-        
-            } catch (err){
-                next(err)
-            }
-        
-        };
-        
-
-    }
-
-    const createParentRouter = (route, child) => {
-
-        const router = express.Router();
-
-        route.middlewares.map((mid) => {
-            if (middlewares[mid]) router.use(route.path, middlewares[mid])
-        })
-        router.use(route.path, child)
-
-        return router
-
-    }
-
-    const createRouter = (routes) => {
-
-        const router = express.Router();
-
-        routes.map((route) => {
-
-            const model = services[route.controller]
-            if (!model) return
-
-            const action = createController(model[route.action])
-
-            if (route.middlewares && route.middlewares.length > 0){
-                route.middlewares.map((mid) => router[route.method](route.path, middlewares[mid]))
-            }
-            
-            router[route.method](route.path, action)
-        
-        })
-        
-        return router
-
-    }
-
-    const createDefaultRootRouter = (name , child) => {
-        return express.Router().use(`/${name}` , child)
-    }
-
-    let modelRouter = createRouter(routes)
-
-    if (rootRouter) {
-        rootRouter = createParentRouter(rootRouter, modelRouter)
-    }else{
-        rootRouter = createDefaultRootRouter(routeName, modelRouter)
-    }
-
-    return rootRouter
+    return mainRouter
 
 }
-
-const mainRouter = express.Router()
-
-const routesKey = Object.keys(routesConfig)
-routesKey.map((controllerName) => {
-    mainRouter.use(createMainController(routesConfig[controllerName], controllerName))
-   
-})
-
-module.exports = mainRouter;
