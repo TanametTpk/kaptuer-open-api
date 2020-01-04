@@ -22,7 +22,7 @@ const createMainController = (routeConfig, routeName) => {
 
     const response = (res, data) => {
 
-        if (req.responseAsHtml){
+        if (req._responseAsHtml){
             res.send(data)
         }
 
