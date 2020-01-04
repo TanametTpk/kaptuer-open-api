@@ -20,13 +20,26 @@ const createMainController = (routeConfig, routeName) => {
 
     })
 
+    const response = (res, data) => {
+
+        if (req.responseAsHtml){
+            res.send(data)
+        }
+
+        else {
+            res.success(data)
+        }
+
+    }
+
     const createController = (method) => {
        
         return async (req , res , next) => {
 
             try {
         
-                res.success(await method(req));
+                // res.success(await method(req));
+                response(res, await method(req))
         
             } catch (err){
                 next(err)
