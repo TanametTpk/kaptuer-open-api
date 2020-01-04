@@ -33,10 +33,10 @@ let services = {
     }
 }
 
-kaptuer.start({
+kaptuer.setup({
     routes,
     services,
     port: <your port>
-})
+}).start()
 
 ```
