@@ -11,13 +11,6 @@ describe('Including middlewares', () => {
 
         let routes = {
             tests:{
-                get: {
-                    path: "/:objectId",
-                    method: "get",
-                    middlewares: ["getterObjectId"],
-                    controller: "tests",
-                    action: "get"
-                },
                 html: {
                     path: "/",
                     method: "get",
@@ -30,11 +23,6 @@ describe('Including middlewares', () => {
         
         let services = {
             tests:{
-                get: async (req) => {
-        
-                    return {id: req._objectId};
-                    
-                },
                 getHtml: async (req) => {
 
                     return "<p>hello world</p>"
@@ -52,26 +40,6 @@ describe('Including middlewares', () => {
         request = supertest(server)
 
     })
-
-    describe('get objectId', () => {
-
-        it('can show object id', (done) => {
-            
-            request
-            .get('/tests/obj')
-            .expect('Content-Type', /json/)
-            .expect(200)
-            .then( res => {
-                expect(res.body.id).to.equal("obj")
-                done()
-            })
-            .catch((err) => {
-                done(err)
-            })
-
-        });
-
-    });
 
     describe('send html', () => {
 
