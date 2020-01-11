@@ -10,6 +10,12 @@ const setupCentroy = ({routes, services, middlewares, errors}) => {
 
 }
 
+const use = ({routes, services, middlewares, errors}) => {
+    
+    setupCentroy({routes, services, middlewares, errors})
+
+}
+
 const setup = ({routes, services, middlewares, errors, port}) => {
 
     const runServer = require('./server')
@@ -26,5 +32,6 @@ const clear = () => {
 
 module.exports = {
     setup,
-    clear
+    clear,
+    use
 }
