@@ -16,6 +16,29 @@ class Centroy {
 
     }
 
+    addGlobal(globals){
+
+        let {errors, middlewares} = _.defaults(globals, {errors:[], middlewares:[]})
+
+        if (middlewares){
+
+            this.state.configs.global.middlewares = [
+                ...this.state.configs.global.middlewares,
+                ...middlewares
+            ]
+        }
+        
+        if (errors){
+
+            this.state.configs.global.errors = [
+                ...this.state.configs.global.errors,
+                ...errors
+            ]
+
+        }
+
+    }
+
     readModulesFromFiles (name, path) {
 
         let jsx = getAll({

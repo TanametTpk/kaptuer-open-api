@@ -30,10 +30,10 @@ describe('Running server', () => {
                 }
             }
         }
-        
+
         let server = kaptuer.setup({
             routes,
-            services
+            services,
         }).getServer()
 
         request = supertest(server)
