@@ -30,11 +30,10 @@ describe('Running server', () => {
                 }
             }
         }
-        
+
         let server = kaptuer.setup({
             routes,
             services,
-            globals:{middlewares:["validateToken"]}
         }).getServer()
 
         request = supertest(server)
