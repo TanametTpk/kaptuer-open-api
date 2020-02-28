@@ -40,3 +40,20 @@ kaptuer.setup({
 }).start()
 
 ```
+
+# CORS
+
+you can allow cors by env like
+```
+ALLOW_ORIGIN=http://localhost
+```
+or multiple origins
+
+```
+ALLOW_ORIGIN=<domain1>
+ALLOW_ORIGIN0=<domain2>
+ALLOW_ORIGIN1=<domain3>
+ALLOW_ORIGIN2=<domain4>
+ALLOW_ORIGIN3=<domain5>
+```
+

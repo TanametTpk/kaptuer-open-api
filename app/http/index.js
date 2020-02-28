@@ -71,6 +71,7 @@ module.exports = () => {
 
             routes.map((route) => {
 
+                // disable here and you should nested route
                 const model = services[route.controller]
                 if (!model) return
 
