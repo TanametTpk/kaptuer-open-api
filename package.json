@@ -1,6 +1,6 @@
 {
   "name": "kaptuer-open-api",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "This is libs that help you create API server with node.js and express.js faster.",
   "main": "index.js",
   "scripts": {
@@ -24,11 +24,13 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "morgan": "^1.9.1",
-    "require-all": "^3.0.0"
+    "require-all": "^3.0.0",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
+    "socket.io-client": "^2.3.0",
     "supertest": "^4.0.2"
   }
 }

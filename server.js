@@ -14,9 +14,14 @@ module.exports = (port) => {
         return server
     }
 
+    const getSocket = () => {
+        return items.socket
+    }
+
     return {
         start,
-        getServer
+        getServer,
+        getSocket
     }
 
 }

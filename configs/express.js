@@ -16,17 +16,18 @@ module.exports = function(){
 	// app.set("database" , database)
 
 	app.use(express.json())
+	app.use(express.urlencoded({extended: true}))
 
 	// add middlewares
 	useMiddleware.map((middleware) => app.use(middlewares[middleware]))
 	app.use(require( "../app/http" )())
 	useError.map((error) => app.use(errorHandlers[error]))
 
-	// const io = require('../app/socket')(server)
+	const socket = require('../app/socket')(server)
 
 	return {
 		app,
 		server,
-		// io,
+		socket,
 	};
 }
