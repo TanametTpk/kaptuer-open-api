@@ -35,7 +35,7 @@ module.exports = function(server){
 
             if (route.socket) {
 
-                const { event_name, boardcast } = route.socket
+                let { event_name, boardcast } = route.socket
                 if (!boardcast) boardcast = {type:"", event_name:"none"}
 
                 createController(
