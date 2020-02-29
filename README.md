@@ -18,7 +18,14 @@ let routes = {
             method: "get",
             middlewares: [],
             controller: "xs",
-            action: "get"
+            action: "get",
+            socket:{
+                event_name: "get-xs",
+                boardcast:{
+                    type: "personal",
+                    event_name: "new-xs"
+                }
+            }
         }
     }
 }
@@ -27,6 +34,7 @@ let services = {
     xs:{
         get: async (req) => {
 
+            req._receivers = [req.body.to]
             return ["hello world"];
             
         }
@@ -36,7 +44,7 @@ let services = {
 kaptuer.setup({
     routes,
     services,
-    port: <your port>
+    port: <port>,
 }).start()
 
 ```
