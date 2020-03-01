@@ -3,8 +3,10 @@ module.exports = function(server){
     const centroy = require( "../../centroy" ).state
     const routesConfig = centroy.routes
     const services = centroy.services
+    const configs = centroy.configs.env.socket
+    const middlewares = centroy.configs.socket.middlewares
 
-    const io = require('socket.io')(server);
+    const io = require('socket.io')(server, configs);
     
     const boardcast = (socket, type, event_name, data, receivers) => {
 
@@ -82,6 +84,17 @@ module.exports = function(server){
 
     }
 
+    const setupMiddlewares = (io, socket) => {
+
+        // socket have global middlewares only, except use namespace you can make sub middlewares
+        Object.values(middlewares).map((middleware) => {
+
+            io.use(middleware)
+
+        })
+
+    }
+
     const setupController = (socket) => {
 
         const routesKey = Object.keys(routesConfig)
@@ -121,6 +134,9 @@ module.exports = function(server){
 	// connected
 	io.on('connection' , function(socket){
         
+        // setup middlewares
+        setupMiddlewares(io, socket)
+
         // setup controller
         setupDefaultController(socket)
 		setupController(socket)
