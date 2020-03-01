@@ -35,6 +35,18 @@ let services = {
         get: async (req) => {
 
             req._receivers = [req.body.to]
+
+            req._boardcasts = [
+                {
+                    event_name:"shock",
+                    receivers:[<receiver room>...],
+                    type: "personal",
+                    data: {
+                        message:"do you shock!"
+                    }
+                }
+            ]
+
             return ["hello world"];
             
         }

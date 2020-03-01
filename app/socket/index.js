@@ -6,7 +6,7 @@ module.exports = function(server){
 
     const io = require('socket.io')(server);
     
-    const boardcast = (socket, type, event_name, data) => {
+    const boardcast = (socket, type, event_name, data, receivers) => {
 
         // * socket is req *
 
@@ -15,8 +15,6 @@ module.exports = function(server){
         }
 
         if (type === "personal"){
-
-            receivers = socket._receivers
 
             if (receivers) receivers.map((receiver) => {
                 socket.to(receiver).emit(event_name, data)
@@ -56,15 +54,29 @@ module.exports = function(server){
 
         socket.on(event_name, async(data, callback) => {
 
-            // socket = req
-            socket.body = data
+            try {
 
-            // response
-            let response = await method(socket)
-            callback(response)
+                // socket = req
+                socket.body = data
 
-            // boardcast
-            boardcast(socket, boardcast_type, boardcast_event_name, response)
+                // response
+                let response = await method(socket)
+                callback(response)
+
+                // boardcast
+                boardcast(socket, boardcast_type, boardcast_event_name, response, socket._receivers)
+
+                // custom boardcast
+                if (socket._boardcasts){
+                    socket._boardcasts.map((_boardcast) => {
+                        boardcast(socket, _boardcast.type, _boardcast.event_name, _boardcast.data, _boardcast.receivers)
+                    })
+                }
+
+
+            } catch (err) {
+                callback({error:err.message})
+            }
 
         });
 
@@ -89,7 +101,7 @@ module.exports = function(server){
                 socket.join(data.room)
                 callback({success:true})
             } catch (err) {
-                console.log(err);
+                callback({error:err.message})
             }
     
         })
@@ -100,7 +112,7 @@ module.exports = function(server){
                 socket.leave(data.room)
                 callback({success:true})
             }catch(err){
-                console.log(err);
+                callback({error:err.message})
             }
     
         })
