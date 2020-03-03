@@ -1,6 +1,6 @@
 {
   "name": "kaptuer-open-api",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "This is libs that help you create API server with node.js and express.js faster.",
   "main": "index.js",
   "scripts": {

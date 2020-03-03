@@ -11,9 +11,9 @@ const setupCentroy = ({routes, services, middlewares, errors, globals, options})
     
 }
 
-const use = ({routes, services, middlewares, errors, globals}) => {
+const use = ({routes, services, middlewares, errors, globals, options}) => {
     
-    setupCentroy({routes, services, middlewares, errors, globals})
+    setupCentroy({routes, services, middlewares, errors, globals, options})
 
 }
 

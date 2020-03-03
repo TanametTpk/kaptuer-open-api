@@ -63,7 +63,7 @@ module.exports = function(server){
 
                 // response
                 let response = await method(socket)
-                callback(response)
+                if (callback) callback(response)
 
                 // boardcast
                 boardcast(socket, boardcast_type, boardcast_event_name, response, socket._receivers)
@@ -77,7 +77,7 @@ module.exports = function(server){
 
 
             } catch (err) {
-                callback({error:err.message})
+                if (callback) callback({error:err.message})
             }
 
         });
@@ -112,9 +112,9 @@ module.exports = function(server){
 
             try{
                 socket.join(data.room)
-                callback({success:true})
+                if (callback) callback({success:true})
             } catch (err) {
-                callback({error:err.message})
+                if (callback) callback({error:err.message})
             }
     
         })
@@ -123,9 +123,9 @@ module.exports = function(server){
     
             try{
                 socket.leave(data.room)
-                callback({success:true})
+                if (callback) callback({success:true})
             }catch(err){
-                callback({error:err.message})
+                if (callback) callback({error:err.message})
             }
     
         })
